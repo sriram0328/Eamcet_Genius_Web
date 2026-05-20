@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+
+# production
+dist/
+
+# local env files
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
