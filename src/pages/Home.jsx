@@ -2,33 +2,27 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { db } from '../lib/firebase'
-import {
-  collection, query, where, getDocs,
-  doc, setDoc
-} from 'firebase/firestore'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 import Header from '../components/Header'
 import BottomNav from '../components/BottomNav'
-import { BookOpen, ClipboardList, TrendingUp, Flame, Star, ChevronRight, CheckCircle, AlertTriangle } from 'lucide-react'
+import { BookOpen, ClipboardList, TrendingUp, Flame, Star, ChevronRight, CheckCircle, AlertTriangle, Calendar } from 'lucide-react'
 
-const SUBJECTS = {
-  MPC:  ['Mathematics', 'Physics', 'Chemistry'],
-  BIPC: ['Biology', 'Physics', 'Chemistry']
-}
+// taskCompletions: { userId, planId, topicId, date, completed, completedAt }
 
 export default function Home() {
   const { profile, refreshProfile } = useAuth()
   const navigate  = useNavigate()
-  const [tasks,       setTasks]       = useState([])
+  const [plan,        setPlan]        = useState(null)   // today's taskPlan doc
+  const [completions, setCompletions] = useState({})     // topicId → true/false
   const [loading,     setLoading]     = useState(true)
   const [subExpiring, setSubExpiring] = useState(false)
   const [daysLeft,    setDaysLeft]    = useState(null)
 
   const today     = new Date().toISOString().split('T')[0]
   const todayDate = new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' })
-  const subjects  = SUBJECTS[profile?.stream] ?? []
 
   useEffect(() => {
-    if (profile) { loadTodayTasks(); checkSubscriptionExpiry() }
+    if (profile) { loadTodayPlan(); checkSubscriptionExpiry() }
   }, [profile])
 
   function checkSubscriptionExpiry() {
@@ -37,38 +31,46 @@ export default function Home() {
     if (diff <= 5 && diff > 0) { setSubExpiring(true); setDaysLeft(diff) }
   }
 
-  async function loadTodayTasks() {
-    // Single where = no composite index needed. Filter date in JS.
-    const snap     = await getDocs(query(collection(db,'dailyTasks'), where('userId','==',profile.id)))
-    const existing = snap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(t => t.date === today)   // filter today's tasks in JS
+  async function loadTodayPlan() {
+    setLoading(true)
+    try {
+      // 1. Fetch all taskPlans, filter by today + stream in JS (no composite index)
+      const planSnap = await getDocs(collection(db, 'taskPlans'))
+      const allPlans = planSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      const todayPlan = allPlans.find(p =>
+        p.date === today &&
+        (p.stream === profile.stream || p.stream === 'ALL')
+      )
+      setPlan(todayPlan || null)
 
-    const created = []
-    for (const sub of subjects) {
-      const found = existing.find(t => t.subject === sub)
-      if (found) { created.push(found); continue }
-      // Only create if genuinely missing for today
-      const ref  = doc(collection(db,'dailyTasks'))
-      const task = { userId: profile.id, subject: sub, date: today, completed: false }
-      await setDoc(ref, task)
-      created.push({ id: ref.id, ...task })
+      if (todayPlan) {
+        // 2. Fetch completions for this plan by this user
+        const compSnap = await getDocs(
+          query(collection(db, 'taskCompletions'), where('userId', '==', profile.id))
+        )
+        const allComps = compSnap.docs.map(d => d.data()).filter(c => c.planId === todayPlan.id)
+        const compMap  = {}
+        allComps.forEach(c => { compMap[c.topicId] = c.completed })
+        setCompletions(compMap)
+      }
+    } catch(err) {
+      console.error('loadTodayPlan error:', err)
     }
-    setTasks(created)
     setLoading(false)
   }
 
-  // When returning from practice, reload tasks & profile to show updated state
+  // Reload when returning from practice
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     if (params.get('refresh') === '1') {
       window.history.replaceState({}, '', '/')
-      loadTodayTasks()
+      loadTodayPlan()
       refreshProfile()
     }
   }, [])
 
-  const completedCount = tasks.filter(t => t.completed).length
+  const tasks         = plan?.tasks || []
+  const completedCount = tasks.filter(t => completions[t.topicId]).length
   const allDone        = tasks.length > 0 && completedCount === tasks.length
 
   return (
@@ -111,46 +113,55 @@ export default function Home() {
         <section>
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-lg">Today's Tasks</h3>
-            <span className="text-xs text-gray-500">{completedCount}/{tasks.length} done</span>
+            {plan && <span className="text-xs text-gray-500">{completedCount}/{tasks.length} done</span>}
           </div>
 
-          {tasks.length > 0 && (
+          {/* Progress bar */}
+          {plan && tasks.length > 0 && (
             <div className="w-full bg-[#2a2a2a] rounded-full h-1.5 mb-4">
               <div className="bg-[#FF6B00] h-1.5 rounded-full transition-all duration-500"
                 style={{ width: `${(completedCount/tasks.length)*100}%` }}/>
             </div>
           )}
 
-          {loading
-            ? <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#2a2a2a]"/>)}</div>
-            : (
-              <div className="space-y-3">
-                {subjects.map(sub => {
-                  const task = tasks.find(t => t.subject === sub)
-                  const done = task?.completed
-                  return (
-                    <button key={sub}
-                      onClick={() => navigate(`/practice?subject=${encodeURIComponent(sub)}&taskId=${task?.id || ''}`)}
-                      className={`w-full card flex items-center justify-between hover:border-[#FF6B00]/40 transition-colors text-left ${done ? 'opacity-70' : ''}`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${done ? 'bg-green-500/20 text-green-400' : 'bg-[#FF6B00]/20 text-[#FF6B00]'}`}>
-                          {done ? '✓' : sub[0]}
-                        </div>
-                        <div>
-                          <p className="font-medium">{sub}</p>
-                          <p className="text-xs text-gray-500">{done ? 'Completed today ✓' : 'Tap to start'}</p>
-                        </div>
+          {loading ? (
+            <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#2a2a2a]"/>)}</div>
+          ) : !plan ? (
+            // No plan assigned for today
+            <div className="card text-center py-8 border-dashed border-[#2a2a2a]">
+              <Calendar size={28} className="text-gray-600 mx-auto mb-2"/>
+              <p className="text-gray-400 font-medium">No tasks assigned today</p>
+              <p className="text-gray-600 text-xs mt-1">Your teacher will assign topics soon</p>
+              <button onClick={() => navigate('/practice')} className="mt-4 text-[#FF6B00] text-sm font-medium hover:underline">
+                Practice freely →
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {tasks.map((task, i) => {
+                const done = !!completions[task.topicId]
+                return (
+                  <button key={i}
+                    onClick={() => navigate(`/practice?topicId=${task.topicId}&subject=${encodeURIComponent(task.subject)}&planId=${plan.id}&taskIdx=${i}`)}
+                    className={`w-full card flex items-center justify-between hover:border-[#FF6B00]/40 transition-colors text-left ${done ? 'opacity-70' : ''}`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${done ? 'bg-green-500/20 text-green-400' : 'bg-[#FF6B00]/20 text-[#FF6B00]'}`}>
+                        {done ? '✓' : task.subject[0]}
                       </div>
-                      {done
-                        ? <CheckCircle size={18} className="text-green-400"/>
-                        : <ChevronRight size={18} className="text-gray-500"/>
-                      }
-                    </button>
-                  )
-                })}
-              </div>
-            )
-          }
+                      <div>
+                        <p className="font-medium text-sm">{task.topicName}</p>
+                        <p className="text-xs text-gray-500">{task.subject} · {done ? 'Completed ✓' : 'Tap to practice'}</p>
+                      </div>
+                    </div>
+                    {done
+                      ? <CheckCircle size={18} className="text-green-400"/>
+                      : <ChevronRight size={18} className="text-gray-500"/>
+                    }
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </section>
 
         {/* Quick nav */}
@@ -158,10 +169,10 @@ export default function Home() {
           <h3 className="font-semibold text-lg mb-3">Quick Access</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label:'Practice',   icon:BookOpen,      path:'/practice',   cls:'from-blue-500/20',    ic:'text-blue-400',   desc:'All subjects & topics' },
-              { label:'Mock Tests', icon:ClipboardList, path:'/mock-tests', cls:'from-purple-500/20',  ic:'text-purple-400', desc:'Weekly & monthly tests' },
-              { label:'Progress',   icon:TrendingUp,    path:'/progress',   cls:'from-green-500/20',   ic:'text-green-400',  desc:'Your analytics' },
-              { label:'Our Plans',  icon:Star,          path:'/plans',      cls:'from-[#FF6B00]/20',   ic:'text-[#FF6B00]',  desc:'Subscription info' }
+              { label:'Practice',   icon:BookOpen,      path:'/practice',   cls:'from-blue-500/20',   ic:'text-blue-400',   desc:'All subjects & topics' },
+              { label:'Mock Tests', icon:ClipboardList, path:'/mock-tests', cls:'from-purple-500/20', ic:'text-purple-400', desc:'Weekly & monthly tests'  },
+              { label:'Progress',   icon:TrendingUp,    path:'/progress',   cls:'from-green-500/20',  ic:'text-green-400',  desc:'Your analytics'          },
+              { label:'Our Plans',  icon:Star,          path:'/plans',      cls:'from-[#FF6B00]/20',  ic:'text-[#FF6B00]',  desc:'Subscription info'       }
             ].map(({ label, icon:Icon, path, cls, ic, desc }) => (
               <button key={path} onClick={() => navigate(path)}
                 className={`card bg-gradient-to-br ${cls} to-transparent border-transparent hover:border-[#FF6B00]/30 transition-all flex flex-col gap-2 items-start text-left`}>
