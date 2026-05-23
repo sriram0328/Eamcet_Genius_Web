@@ -166,10 +166,16 @@ function UsersTab({ users, onRefresh }) {
 
 // ════════════ SUBSCRIPTIONS TAB ════════════
 function SubsTab({ users, onRefresh }) {
-  const [sel,    setSel]    = useState(null)
-  const [form,   setForm]   = useState({ plan:'monthly', start:'', end:'', isSubscribed: true })
-  const [saving, setSaving] = useState(false)
-  const [msg,    setMsg]    = useState('')
+  const [search,   setSearch]   = useState('')
+  const [selIds,   setSelIds]   = useState([])   // multi-select
+  const [form,     setForm]     = useState({ plan:'monthly', start:'', end:'', isSubscribed: true })
+  const [saving,   setSaving]   = useState(false)
+  const [msg,      setMsg]      = useState('')
+
+  const filtered = users.filter(u =>
+    u.username?.toLowerCase().includes(search.toLowerCase()) ||
+    u.email?.toLowerCase().includes(search.toLowerCase())
+  )
 
   function calculateEndDate(startDate, plan) {
     if (!startDate) return ''
@@ -178,46 +184,126 @@ function SubsTab({ users, onRefresh }) {
     return start.toISOString().split('T')[0]
   }
 
-  function selectUser(u) {
-    const today = new Date().toISOString().split('T')[0]
-    const plan  = u.subscriptionPlan || 'monthly'
-    const start = u.subscriptionStart || today
-    const end   = u.subscriptionEnd   || calculateEndDate(start, plan)
-    setSel(u); setForm({ plan, start, end, isSubscribed: u.isSubscribed ?? false }); setMsg('')
+  function toggleUser(u) {
+    setSelIds(prev => {
+      const isAlready = prev.includes(u.id)
+      const next = isAlready ? prev.filter(id => id !== u.id) : [...prev, u.id]
+      // When switching from 1 selected to another single selection, seed form from that user
+      if (!isAlready && next.length === 1) {
+        const today = new Date().toISOString().split('T')[0]
+        const plan  = u.subscriptionPlan || 'monthly'
+        const start = u.subscriptionStart || today
+        const end   = u.subscriptionEnd   || calculateEndDate(start, plan)
+        setForm({ plan, start, end, isSubscribed: u.isSubscribed ?? false })
+      }
+      setMsg('')
+      return next
+    })
   }
 
-  function handlePlanChange(newPlan) { setForm(f => ({ ...f, plan: newPlan, end: calculateEndDate(f.start, newPlan) })) }
+  function selectAll() {
+    if (selIds.length === filtered.length) {
+      setSelIds([])
+    } else {
+      setSelIds(filtered.map(u => u.id))
+      // seed form defaults for bulk
+      const today = new Date().toISOString().split('T')[0]
+      setForm({ plan: 'monthly', start: today, end: calculateEndDate(today, 'monthly'), isSubscribed: true })
+      setMsg('')
+    }
+  }
+
+  function handlePlanChange(newPlan)   { setForm(f => ({ ...f, plan: newPlan, end: calculateEndDate(f.start, newPlan) })) }
   function handleStartChange(newStart) { setForm(f => ({ ...f, start: newStart, end: calculateEndDate(newStart, f.plan) })) }
 
   async function save() {
-    if (!sel) return
-    setSaving(true)
-    await updateDoc(doc(db, 'users', sel.id), {
-      isSubscribed: form.isSubscribed, subscriptionPlan: form.plan,
-      subscriptionStart: form.start||null, subscriptionEnd: form.end||null
-    })
-    setMsg('✅ Saved!'); setSaving(false); onRefresh()
-    setTimeout(() => setMsg(''), 3000)
+    if (!selIds.length) return
+    setSaving(true); setMsg('')
+    try {
+      await Promise.all(selIds.map(id =>
+        updateDoc(doc(db, 'users', id), {
+          isSubscribed: form.isSubscribed, subscriptionPlan: form.plan,
+          subscriptionStart: form.start || null, subscriptionEnd: form.end || null
+        })
+      ))
+      setMsg(`✅ Updated ${selIds.length} student${selIds.length > 1 ? 's' : ''}!`)
+      onRefresh()
+      setTimeout(() => setMsg(''), 3000)
+    } catch(err) { setMsg('❌ ' + err.message) }
+    setSaving(false)
   }
+
+  const selUsers = users.filter(u => selIds.includes(u.id))
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <p className="text-sm text-gray-400 mb-3">Select a student:</p>
+        {/* Search + select-all header */}
+        <div className="flex gap-2 mb-3">
+          <input
+            className="input flex-1 text-sm"
+            placeholder="Search by name or email..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <button
+            onClick={selectAll}
+            className="btn-outline text-xs px-3 py-2 whitespace-nowrap"
+          >
+            {selIds.length === filtered.length && filtered.length > 0 ? 'Deselect All' : 'Select All'}
+          </button>
+        </div>
+
+        {selIds.length > 0 && (
+          <p className="text-xs text-[#FF6B00] mb-2 font-medium">
+            {selIds.length} student{selIds.length > 1 ? 's' : ''} selected
+          </p>
+        )}
+
         <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
-          {users.map(u => (
-            <button key={u.id} onClick={() => selectUser(u)}
-              className={`w-full card flex items-center justify-between text-left transition-colors ${sel?.id===u.id ? 'border-[#FF6B00]' : 'hover:border-[#FF6B00]/30'}`}>
-              <div><p className="font-medium text-sm">{u.username}</p><p className="text-xs text-gray-500">{u.email}</p></div>
-              <span className={`badge text-xs ${u.isSubscribed ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>{u.isSubscribed ? 'Pro' : 'Free'}</span>
-            </button>
-          ))}
+          {filtered.map(u => {
+            const isSel = selIds.includes(u.id)
+            return (
+              <button key={u.id} onClick={() => toggleUser(u)}
+                className={`w-full card flex items-center justify-between text-left transition-colors ${isSel ? 'border-[#FF6B00] bg-[#FF6B00]/5' : 'hover:border-[#FF6B00]/30'}`}>
+                <div className="flex items-center gap-3">
+                  {/* Checkbox indicator */}
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${isSel ? 'border-[#FF6B00] bg-[#FF6B00]' : 'border-[#444]'}`}>
+                    {isSel && <span className="text-white text-[9px] font-bold leading-none">✓</span>}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{u.username}</p>
+                    <p className="text-xs text-gray-500">{u.email}</p>
+                  </div>
+                </div>
+                <span className={`badge text-xs ${u.isSubscribed ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
+                  {u.isSubscribed ? 'Pro' : 'Free'}
+                </span>
+              </button>
+            )
+          })}
+          {filtered.length === 0 && <p className="text-gray-500 text-sm text-center py-6">No users found</p>}
         </div>
       </div>
-      {sel && (
+
+      {selIds.length > 0 && (
         <div className="card">
-          <h3 className="font-semibold mb-1">Edit: {sel.username}</h3>
-          <p className="text-xs text-gray-500 mb-4">{sel.email}</p>
+          <h3 className="font-semibold mb-1">
+            {selIds.length === 1 ? `Edit: ${selUsers[0]?.username}` : `Bulk Edit: ${selIds.length} students`}
+          </h3>
+          {selIds.length === 1
+            ? <p className="text-xs text-gray-500 mb-4">{selUsers[0]?.email}</p>
+            : (
+              <div className="flex flex-wrap gap-1 mb-4">
+                {selUsers.slice(0, 5).map(u => (
+                  <span key={u.id} className="badge bg-[#2a2a2a] text-gray-300 text-xs">{u.username}</span>
+                ))}
+                {selUsers.length > 5 && (
+                  <span className="badge bg-[#2a2a2a] text-gray-500 text-xs">+{selUsers.length - 5} more</span>
+                )}
+              </div>
+            )
+          }
           <div className="space-y-4">
             <div>
               <label className="label">Plan</label>
@@ -251,8 +337,10 @@ function SubsTab({ users, onRefresh }) {
               <input type="checkbox" id="isSub" checked={form.isSubscribed} onChange={e => setForm(f=>({...f,isSubscribed:e.target.checked}))} className="w-4 h-4 accent-[#FF6B00]"/>
               <label htmlFor="isSub" className="text-sm cursor-pointer">Active Subscription</label>
             </div>
-            {msg && <p className="text-green-400 text-sm">{msg}</p>}
-            <button onClick={save} disabled={saving} className="btn-primary w-full">{saving ? 'Saving...' : 'Update Subscription'}</button>
+            {msg && <p className={`text-sm ${msg.startsWith('✅') ? 'text-green-400' : 'text-red-400'}`}>{msg}</p>}
+            <button onClick={save} disabled={saving} className="btn-primary w-full">
+              {saving ? 'Saving...' : selIds.length > 1 ? `Update ${selIds.length} Students` : 'Update Subscription'}
+            </button>
           </div>
         </div>
       )}
