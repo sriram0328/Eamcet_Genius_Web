@@ -23,7 +23,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#FF6B00] rounded-2xl flex items-center justify-center font-bold text-2xl mx-auto mb-3 select-none">EG</div>
@@ -54,9 +54,11 @@ export default function Login() {
 
         <p className="text-center mt-5 text-xs text-gray-600">
           Admin?{' '}
-          <Link to="/admin/login" className="text-gray-400 underline">Admin login</Link>
+          <Link to="/admin/login" className="text-gray-600 underline">Admin login</Link>
         </p>
       </div>
     </div>
   )
 }
+
+

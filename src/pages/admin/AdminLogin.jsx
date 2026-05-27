@@ -40,10 +40,10 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-[#1a1a1a] border-2 border-[#FF6B00] rounded-2xl flex items-center justify-center font-bold text-[#FF6B00] text-xl mx-auto mb-3">A</div>
+          <div className="w-14 h-14 bg-white border-2 border-[#FF6B00] rounded-2xl flex items-center justify-center font-bold text-[#FF6B00] text-xl mx-auto mb-3">A</div>
           <h1 className="text-xl font-bold">Admin Portal</h1>
           <p className="text-gray-500 text-sm mt-1">EamcetGenius Management</p>
         </div>

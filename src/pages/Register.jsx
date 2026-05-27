@@ -26,17 +26,17 @@ export default function Register() {
   }
 
   if (success) return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
       <div className="card text-center max-w-sm w-full">
         <CheckCircle size={56} className="text-green-400 mx-auto mb-4"/>
         <h2 className="text-xl font-bold text-green-400 mb-2">Registered Successfully!</h2>
-        <p className="text-gray-400 text-sm">Redirecting you to login...</p>
+        <p className="text-gray-600 text-sm">Redirecting you to login...</p>
       </div>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#FF6B00] rounded-2xl flex items-center justify-center font-bold text-2xl mx-auto mb-3 select-none">EG</div>
@@ -88,3 +88,5 @@ export default function Register() {
     </div>
   )
 }
+
+

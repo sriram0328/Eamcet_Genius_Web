@@ -72,13 +72,13 @@ export default function AdminDash() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f]">
-      <header className="bg-[#1a1a1a] border-b border-[#2a2a2a] px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+    <div className="min-h-screen bg-[#f8fafc]">
+      <header className="bg-white border-b border-[#e5e7eb] px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-[#FF6B00] rounded-lg flex items-center justify-center font-bold text-sm select-none">EG</div>
           <span className="font-bold">EamcetGenius Admin</span>
         </div>
-        <button onClick={handleLogout} className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors">
+        <button onClick={handleLogout} className="flex items-center gap-2 text-gray-600 hover:text-[#FF6B00] text-sm transition-colors">
           <LogOut size={15}/> Logout
         </button>
       </header>
@@ -101,7 +101,7 @@ export default function AdminDash() {
         <div className="flex gap-1 mb-6 overflow-x-auto pb-1">
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${tab===t ? 'bg-[#FF6B00] text-white' : 'bg-[#1a1a1a] text-gray-400 hover:text-white border border-[#2a2a2a]'}`}>
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${tab===t ? 'bg-[#FF6B00] text-white' : 'bg-white text-gray-600 hover:text-[#FF6B00] border border-[#e5e7eb]'}`}>
               {t}
             </button>
           ))}
@@ -135,7 +135,7 @@ function UsersTab({ users, onRefresh }) {
       <div className="card overflow-x-auto">
         <table className="w-full text-sm min-w-[500px]">
           <thead>
-            <tr className="border-b border-[#2a2a2a] text-gray-400 text-xs">
+            <tr className="border-b border-[#e5e7eb] text-gray-600 text-xs">
               {['Name','Email','Stream','Year','Streak','Status'].map(h => (
                 <th key={h} className="text-left py-3 pr-4">{h}</th>
               ))}
@@ -143,11 +143,11 @@ function UsersTab({ users, onRefresh }) {
           </thead>
           <tbody>
             {filtered.map(u => (
-              <tr key={u.id} className="border-b border-[#2a2a2a]/50 hover:bg-[#2a2a2a]/20">
+              <tr key={u.id} className="border-b border-[#e5e7eb]/50 hover:bg-[#f1f5f9]/20">
                 <td className="py-3 pr-4 font-medium">{u.username}</td>
-                <td className="py-3 pr-4 text-gray-400 text-xs">{u.email}</td>
+                <td className="py-3 pr-4 text-gray-600 text-xs">{u.email}</td>
                 <td className="py-3 pr-4"><span className="badge bg-[#FF6B00]/10 text-[#FF6B00]">{u.stream}</span></td>
-                <td className="py-3 pr-4 text-gray-400">Yr {u.yearOfStudy}</td>
+                <td className="py-3 pr-4 text-gray-600">Yr {u.yearOfStudy}</td>
                 <td className="py-3 pr-4 text-[#FF6B00] font-medium">🔥{u.streak ?? 0}</td>
                 <td className="py-3">
                   <span className={`badge ${u.isSubscribed ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
@@ -288,29 +288,15 @@ function SubsTab({ users, onRefresh }) {
 
       {selIds.length > 0 && (
         <div className="card">
-          <h3 className="font-semibold mb-1">
-            {selIds.length === 1 ? `Edit: ${selUsers[0]?.username}` : `Bulk Edit: ${selIds.length} students`}
-          </h3>
-          {selIds.length === 1
-            ? <p className="text-xs text-gray-500 mb-4">{selUsers[0]?.email}</p>
-            : (
-              <div className="flex flex-wrap gap-1 mb-4">
-                {selUsers.slice(0, 5).map(u => (
-                  <span key={u.id} className="badge bg-[#2a2a2a] text-gray-300 text-xs">{u.username}</span>
-                ))}
-                {selUsers.length > 5 && (
-                  <span className="badge bg-[#2a2a2a] text-gray-500 text-xs">+{selUsers.length - 5} more</span>
-                )}
-              </div>
-            )
-          }
+          <h3 className="font-semibold mb-1">Edit: {sel.username}</h3>
+          <p className="text-xs text-gray-500 mb-4">{sel.email}</p>
           <div className="space-y-4">
             <div>
               <label className="label">Plan</label>
               <div className="flex gap-2">
                 {[['monthly','Monthly — ₹299 (30 days)'],['yearly','Yearly — ₹2999 (365 days)']].map(([val,label]) => (
                   <button key={val} type="button" onClick={() => handlePlanChange(val)}
-                    className={`flex-1 py-3 px-3 rounded-xl text-sm font-semibold border-2 transition-all text-left ${form.plan===val ? 'border-[#FF6B00] bg-[#FF6B00]/10 text-[#FF6B00]' : 'border-[#2a2a2a] text-gray-400'}`}>
+                    className={`flex-1 py-3 px-3 rounded-xl text-sm font-semibold border-2 transition-all text-left ${form.plan===val ? 'border-[#FF6B00] bg-[#FF6B00]/10 text-[#FF6B00]' : 'border-[#e5e7eb] text-gray-600'}`}>
                     {label}
                   </button>
                 ))}
@@ -325,7 +311,7 @@ function SubsTab({ users, onRefresh }) {
                 <span className="text-[#FF6B00] text-lg">📅</span>
                 <div>
                   <p className="text-sm font-medium text-[#FF6B00]">{form.plan === 'yearly' ? '365 days' : '30 days'} subscription</p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-600">
                     {new Date(form.start).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}
                     {' → '}
                     {new Date(form.end).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}
@@ -471,7 +457,7 @@ function DailyTasksTab() {
   if (view === 'create') return (
     <div className="max-w-2xl space-y-5">
       <div className="flex items-center gap-3">
-        <button onClick={() => setView('list')} className="text-gray-400 hover:text-white text-sm">← Back</button>
+        <button onClick={() => setView('list')} className="text-gray-600 hover:text-[#FF6B00] text-sm">← Back</button>
         <h3 className="font-semibold text-lg">{editPlan ? 'Edit Task Plan' : 'Create Task Plan'}</h3>
       </div>
 
@@ -486,7 +472,7 @@ function DailyTasksTab() {
             <div className="flex gap-2 mt-1">
               {['MPC','BIPC','ALL'].map(s => (
                 <button key={s} type="button" onClick={() => { setSelStream(s); setTasks([]) }}
-                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${selStream===s ? 'border-[#FF6B00] bg-[#FF6B00]/10 text-[#FF6B00]' : 'border-[#2a2a2a] text-gray-500'}`}>
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-2 transition-all ${selStream===s ? 'border-[#FF6B00] bg-[#FF6B00]/10 text-[#FF6B00]' : 'border-[#e5e7eb] text-gray-500'}`}>
                   {s}
                 </button>
               ))}
@@ -503,7 +489,7 @@ function DailyTasksTab() {
           </div>
 
           {tasks.length === 0 && (
-            <div className="border-2 border-dashed border-[#2a2a2a] rounded-xl p-6 text-center">
+            <div className="border-2 border-dashed border-[#e5e7eb] rounded-xl p-6 text-center">
               <Calendar size={24} className="text-gray-600 mx-auto mb-2"/>
               <p className="text-gray-500 text-sm">No tasks yet. Click "Add Topic" to assign topics for this day.</p>
             </div>
@@ -511,7 +497,7 @@ function DailyTasksTab() {
 
           <div className="space-y-3">
             {tasks.map((task, i) => (
-              <div key={i} className="flex items-center gap-3 bg-[#1a1a1a] rounded-xl p-3 border border-[#2a2a2a]">
+              <div key={i} className="flex items-center gap-3 bg-white rounded-xl p-3 border border-[#e5e7eb]">
                 <div className="w-7 h-7 bg-[#FF6B00]/20 rounded-lg flex items-center justify-center text-[#FF6B00] font-bold text-xs shrink-0">{i+1}</div>
                 <div className="flex-1 grid grid-cols-2 gap-2">
                   {/* Step 1: pick subject */}
@@ -578,7 +564,7 @@ function DailyTasksTab() {
       {!loading && plans.length === 0 && (
         <div className="card text-center py-12">
           <Calendar size={40} className="text-gray-600 mx-auto mb-3"/>
-          <p className="font-medium text-gray-400">No task plans yet</p>
+          <p className="font-medium text-gray-600">No task plans yet</p>
           <p className="text-xs text-gray-600 mt-1 mb-4">Create a plan to assign specific topics for students to practice each day</p>
           <button onClick={startCreate} className="btn-primary mx-auto flex items-center gap-2"><Plus size={14}/> Create First Plan</button>
         </div>
@@ -589,7 +575,7 @@ function DailyTasksTab() {
           const isToday = plan.date === new Date().toISOString().split('T')[0]
           const isPast  = plan.date < new Date().toISOString().split('T')[0]
           return (
-            <div key={plan.id} className={`card border ${isToday ? 'border-[#FF6B00]/40 bg-[#FF6B00]/5' : 'border-[#2a2a2a]'}`}>
+            <div key={plan.id} className={`card border ${isToday ? 'border-[#FF6B00]/40 bg-[#FF6B00]/5' : 'border-[#e5e7eb]'}`}>
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -605,7 +591,7 @@ function DailyTasksTab() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {(plan.tasks || []).map((t, i) => (
-                      <div key={i} className="flex items-center gap-1.5 bg-[#2a2a2a] rounded-lg px-2.5 py-1.5">
+                      <div key={i} className="flex items-center gap-1.5 bg-[#f1f5f9] rounded-lg px-2.5 py-1.5">
                         <span className="text-[#FF6B00] text-xs font-medium">{t.subject?.slice(0,4)}</span>
                         <span className="text-gray-300 text-xs">{t.topicName}</span>
                       </div>
@@ -707,7 +693,7 @@ function QuestionsTab() {
       <div className="flex gap-2">
         {[['single','✏️ Add Single'],['bulk','📊 Bulk Upload']].map(([key,label])=>(
           <button key={key} onClick={()=>{setMode(key);setShowForm(key==='single');setMsg('');setBulkResults([])}}
-            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${mode===key?'bg-[#FF6B00] text-white':'bg-[#1a1a1a] text-gray-400 border border-[#2a2a2a] hover:text-white'}`}>{label}</button>
+            className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${mode===key?'bg-[#FF6B00] text-white':'bg-white text-gray-600 border border-[#e5e7eb] hover:text-[#FF6B00]'}`}>{label}</button>
         ))}
       </div>
       {mode==='bulk'&&(
@@ -717,7 +703,7 @@ function QuestionsTab() {
               <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center text-xl shrink-0">📤</div>
               <div className="flex-1">
                 <p className="font-semibold text-green-400 mb-1">Upload Excel File</p>
-                <p className="text-gray-400 text-sm mb-3">Columns: topic_name, subject, difficulty, question_text, option_a–d, correct_answer, explanation</p>
+                <p className="text-gray-600 text-sm mb-3">Columns: topic_name, subject, difficulty, question_text, option_a–d, correct_answer, explanation</p>
                 <label className="inline-flex items-center gap-2 bg-[#FF6B00] hover:bg-[#cc5500] text-white font-medium px-4 py-2 rounded-lg text-sm cursor-pointer transition-colors">
                   📤 Choose Excel File<input type="file" accept=".xlsx,.xls" onChange={handleExcelUpload} className="hidden"/>
                 </label>
@@ -741,13 +727,13 @@ function QuestionsTab() {
         <>
           {showForm?(
             <form onSubmit={saveQuestion} className="card space-y-4 border-[#FF6B00]/30">
-              <div className="flex items-center justify-between"><h3 className="font-bold">{editId?'✏️ Edit':'➕ Add'} Question</h3><button type="button" onClick={resetForm} className="text-gray-400 text-sm">✕</button></div>
+              <div className="flex items-center justify-between"><h3 className="font-bold">{editId?'✏️ Edit':'➕ Add'} Question</h3><button type="button" onClick={resetForm} className="text-gray-600 text-sm">✕</button></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><label className="label">Topic *</label><select className="input" value={form.topicId} onChange={e=>handleTopicChange(e.target.value)} required><option value="">-- Select --</option>{SUBJECTS.map(sub=>(<optgroup key={sub} label={`── ${sub} ──`}>{topics.filter(t=>t.subject===sub).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</optgroup>))}</select></div>
-                <div><label className="label">Difficulty *</label><div className="flex gap-2 mt-1">{['Easy','Medium','Hard'].map(d=>(<button key={d} type="button" onClick={()=>setForm(f=>({...f,difficulty:d}))} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${form.difficulty===d?d==='Easy'?'border-green-500 bg-green-500/20 text-green-400':d==='Medium'?'border-yellow-500 bg-yellow-500/20 text-yellow-400':'border-red-500 bg-red-500/20 text-red-400':'border-[#2a2a2a] text-gray-500'}`}>{d}</button>))}</div></div>
+                <div><label className="label">Difficulty *</label><div className="flex gap-2 mt-1">{['Easy','Medium','Hard'].map(d=>(<button key={d} type="button" onClick={()=>setForm(f=>({...f,difficulty:d}))} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all ${form.difficulty===d?d==='Easy'?'border-green-500 bg-green-500/20 text-green-400':d==='Medium'?'border-yellow-500 bg-yellow-500/20 text-yellow-400':'border-red-500 bg-red-500/20 text-red-400':'border-[#e5e7eb] text-gray-500'}`}>{d}</button>))}</div></div>
               </div>
               <div><label className="label">Question *</label><textarea className="input h-20 resize-none text-sm" value={form.questionText} onChange={e=>setForm(f=>({...f,questionText:e.target.value}))} required/></div>
-              <div className="space-y-2">{[['A','optionA'],['B','optionB'],['C','optionC'],['D','optionD']].map(([label,key])=>{const isCorrect=form.correctAnswer!==''&&form.correctAnswer===form[key];return(<div key={key} className={`flex items-center gap-3 p-2.5 rounded-xl border-2 ${isCorrect?'border-green-500 bg-green-500/10':'border-[#2a2a2a] bg-[#111]'}`}><button type="button" onClick={()=>{if(form[key].trim())setForm(f=>({...f,correctAnswer:f[key]}))}} className={`w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-xs shrink-0 ${isCorrect?'border-green-500 bg-green-500 text-white':'border-[#444] text-gray-400'}`}>{isCorrect?'✓':label}</button><input className="flex-1 bg-transparent outline-none text-sm" placeholder={`Option ${label}`} value={form[key]} onChange={e=>{const val=e.target.value;setForm(f=>{const u={...f,[key]:val};if(f.correctAnswer===f[key])u.correctAnswer=val;return u})}} required/></div>)})}</div>
+              <div className="space-y-2">{[['A','optionA'],['B','optionB'],['C','optionC'],['D','optionD']].map(([label,key])=>{const isCorrect=form.correctAnswer!==''&&form.correctAnswer===form[key];return(<div key={key} className={`flex items-center gap-3 p-2.5 rounded-xl border-2 ${isCorrect?'border-green-500 bg-green-500/10':'border-[#e5e7eb] bg-white'}`}><button type="button" onClick={()=>{if(form[key].trim())setForm(f=>({...f,correctAnswer:f[key]}))}} className={`w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-xs shrink-0 ${isCorrect?'border-green-500 bg-green-500 text-white':'border-[#444] text-gray-600'}`}>{isCorrect?'✓':label}</button><input className="flex-1 bg-transparent outline-none text-sm" placeholder={`Option ${label}`} value={form[key]} onChange={e=>{const val=e.target.value;setForm(f=>{const u={...f,[key]:val};if(f.correctAnswer===f[key])u.correctAnswer=val;return u})}} required/></div>)})}</div>
               <div><label className="label">Explanation (optional)</label><textarea className="input h-16 resize-none text-sm" value={form.explanation} onChange={e=>setForm(f=>({...f,explanation:e.target.value}))}/></div>
               {msg&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}
               <div className="flex gap-3"><button type="button" onClick={resetForm} className="btn-outline flex-1">Cancel</button><button type="submit" disabled={saving} className="btn-primary flex-1">{saving?'Saving...':editId?'💾 Update':'➕ Add'}</button></div>
@@ -769,17 +755,17 @@ function QuestionsTab() {
         <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
           {filtered.length===0&&<p className="text-center text-gray-500 py-8">No questions yet.</p>}
           {filtered.map((q,i)=>(
-            <div key={q.id} className="border border-[#2a2a2a] rounded-xl p-3 hover:border-[#FF6B00]/30">
+            <div key={q.id} className="border border-[#e5e7eb] rounded-xl p-3 hover:border-[#FF6B00]/30">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                     <span className="text-xs text-gray-500">Q{i+1}</span>
                     <span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs">{q.subject}</span>
-                    <span className="badge bg-[#2a2a2a] text-gray-400 text-xs">{q.topicName}</span>
+                    <span className="badge bg-[#f1f5f9] text-gray-600 text-xs">{q.topicName}</span>
                     <span className={`badge text-xs ${diffColor[q.difficulty]}`}>{q.difficulty}</span>
                   </div>
                   <p className="text-sm font-medium mb-2">{q.questionText}</p>
-                  <div className="grid grid-cols-2 gap-1">{[['A',q.optionA],['B',q.optionB],['C',q.optionC],['D',q.optionD]].map(([l,o])=>(<div key={l} className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg ${o===q.correctAnswer?'bg-green-500/15 text-green-400':'text-gray-400'}`}><span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${o===q.correctAnswer?'bg-green-500 text-white':'bg-[#2a2a2a]'}`}>{l}</span><span className="truncate">{o}</span></div>))}</div>
+                  <div className="grid grid-cols-2 gap-1">{[['A',q.optionA],['B',q.optionB],['C',q.optionC],['D',q.optionD]].map(([l,o])=>(<div key={l} className={`flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg ${o===q.correctAnswer?'bg-green-500/15 text-green-400':'text-gray-600'}`}><span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${o===q.correctAnswer?'bg-green-500 text-white':'bg-[#f1f5f9]'}`}>{l}</span><span className="truncate">{o}</span></div>))}</div>
                 </div>
                 <div className="flex flex-col gap-1.5 shrink-0">
                   <button onClick={()=>editQuestion(q)} className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded-lg">✏️</button>
@@ -816,7 +802,7 @@ function TopicsTab() {
       </div>
       <div className="card overflow-y-auto max-h-[500px]">
         <h3 className="font-semibold mb-3">All Topics ({topics.length})</h3>
-        <div className="space-y-1.5">{topics.map(t=>(<div key={t.id} className="flex items-center justify-between py-2 border-b border-[#2a2a2a]/50"><div><span className="text-sm">{t.name}</span><span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs ml-2">{t.subject}</span></div><button onClick={()=>deleteTopic(t.id)} className="text-gray-600 hover:text-red-400 ml-2"><Trash2 size={13}/></button></div>))}{topics.length===0&&<p className="text-gray-500 text-sm text-center py-6">No topics yet.</p>}</div>
+        <div className="space-y-1.5">{topics.map(t=>(<div key={t.id} className="flex items-center justify-between py-2 border-b border-[#e5e7eb]/50"><div><span className="text-sm">{t.name}</span><span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs ml-2">{t.subject}</span></div><button onClick={()=>deleteTopic(t.id)} className="text-gray-600 hover:text-red-400 ml-2"><Trash2 size={13}/></button></div>))}{topics.length===0&&<p className="text-gray-500 text-sm text-center py-6">No topics yet.</p>}</div>
       </div>
     </div>
   )
@@ -851,14 +837,14 @@ function MockTestsTab() {
   async function deleteTestQ(qId){if(!confirm('Remove?'))return;await deleteDoc(doc(db,'questions',qId));loadTestQuestions(selTest.id)}
 
   if(step==='list')return(<div className="space-y-4"><button onClick={()=>{setStep('create');setMsg('');setForm({title:'',type:'weekly',durationMins:60,totalQuestions:30})}} className="btn-primary">+ Create Mock Test</button><div className="space-y-3">{tests.length===0&&<p className="text-gray-500 text-sm text-center py-8">No mock tests yet.</p>}{tests.map(t=>(<div key={t.id} className="card flex items-center justify-between"><div><p className="font-semibold">{t.title}</p><div className="flex gap-2 mt-1"><span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs">{t.type}</span><span className="text-xs text-gray-500">{t.durationMins}min · {t.totalQuestions} Qs</span></div></div><div className="flex gap-2"><button onClick={()=>{setSelTest(t);setStep('addQ');setShowQForm(false);setAddMode('single');setMsg('');setBulkRows([]);setBulkResults([]);loadTestQuestions(t.id)}} className="btn-outline text-xs px-3 py-2">✏️ Manage</button><button onClick={async()=>{if(confirm('Delete?')){await deleteDoc(doc(db,'mockTests',t.id));loadTests()}}} className="text-gray-600 hover:text-red-400 p-2"><Trash2 size={14}/></button></div></div>))}</div></div>)
-  if(step==='create')return(<form onSubmit={createTest} className="card max-w-lg space-y-4"><div className="flex items-center gap-3"><button type="button" onClick={()=>setStep('list')} className="text-gray-400 text-sm">← Back</button><h3 className="font-semibold">Create Mock Test</h3></div><div><label className="label">Title</label><input className="input" placeholder="e.g. Weekly Mock Test — May Week 1" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} required/></div><div className="grid grid-cols-2 gap-3"><div><label className="label">Type</label><select className="input" value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{['topic','subject','weekly','monthly','full'].map(t=><option key={t}>{t}</option>)}</select></div><div><label className="label">Duration (min)</label><input type="number" className="input" value={form.durationMins} onChange={e=>setForm(f=>({...f,durationMins:+e.target.value}))}/></div></div>{msg&&<p className="text-red-400 text-sm">{msg}</p>}<button type="submit" className="btn-primary w-full">Create & Add Questions →</button></form>)
+  if(step==='create')return(<form onSubmit={createTest} className="card max-w-lg space-y-4"><div className="flex items-center gap-3"><button type="button" onClick={()=>setStep('list')} className="text-gray-600 text-sm">← Back</button><h3 className="font-semibold">Create Mock Test</h3></div><div><label className="label">Title</label><input className="input" placeholder="e.g. Weekly Mock Test — May Week 1" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} required/></div><div className="grid grid-cols-2 gap-3"><div><label className="label">Type</label><select className="input" value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))}>{['topic','subject','weekly','monthly','full'].map(t=><option key={t}>{t}</option>)}</select></div><div><label className="label">Duration (min)</label><input type="number" className="input" value={form.durationMins} onChange={e=>setForm(f=>({...f,durationMins:+e.target.value}))}/></div></div>{msg&&<p className="text-red-400 text-sm">{msg}</p>}<button type="submit" className="btn-primary w-full">Create & Add Questions →</button></form>)
 
   return(<div className="space-y-5 max-w-4xl">
-    <div className="flex items-center gap-3"><button onClick={()=>{setStep('list');setShowQForm(false);setMsg('');setBulkRows([]);setBulkResults([])}} className="text-gray-400 text-sm">← Back</button><div><h3 className="font-semibold">{selTest?.title}</h3><p className="text-xs text-gray-500">{selTest?.type} · {selTest?.durationMins}min · {testQuestions.length} Qs</p></div></div>
-    <div className="flex gap-2">{[['single','✏️ Single'],['excel','📊 Bulk Excel']].map(([key,label])=>(<button key={key} onClick={()=>{setAddMode(key);setShowQForm(key==='single');setMsg('');setBulkResults([])}} className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${addMode===key?'bg-[#FF6B00] text-white':'bg-[#1a1a1a] text-gray-400 border border-[#2a2a2a]'}`}>{label}</button>))}</div>
+    <div className="flex items-center gap-3"><button onClick={()=>{setStep('list');setShowQForm(false);setMsg('');setBulkRows([]);setBulkResults([])}} className="text-gray-600 text-sm">← Back</button><div><h3 className="font-semibold">{selTest?.title}</h3><p className="text-xs text-gray-500">{selTest?.type} · {selTest?.durationMins}min · {testQuestions.length} Qs</p></div></div>
+    <div className="flex gap-2">{[['single','✏️ Single'],['excel','📊 Bulk Excel']].map(([key,label])=>(<button key={key} onClick={()=>{setAddMode(key);setShowQForm(key==='single');setMsg('');setBulkResults([])}} className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${addMode===key?'bg-[#FF6B00] text-white':'bg-white text-gray-600 border border-[#e5e7eb]'}`}>{label}</button>))}</div>
     {addMode==='excel'&&(<div className="space-y-3"><div className="card border-green-500/20 bg-green-500/5 flex items-start gap-4"><div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center text-xl shrink-0">📤</div><div className="flex-1"><p className="font-semibold text-green-400 mb-1">Upload Excel for "{selTest?.title}"</p><label className="inline-flex items-center gap-2 bg-[#FF6B00] text-white px-4 py-2 rounded-lg text-sm cursor-pointer">📤 Choose File<input type="file" accept=".xlsx,.xls" onChange={handleExcelUpload} className="hidden"/></label>{bulkFile&&<div className="mt-2 flex items-center gap-2"><span className="text-green-400 text-sm">✅ {bulkFile}</span><span className="text-gray-500 text-xs">({bulkRows.length} rows)</span></div>}</div></div>{bulkRows.length>0&&<div className="card flex items-center justify-between"><p className="font-semibold">{bulkRows.length} questions ready</p><button onClick={uploadBulkToTest} disabled={bulkLoading} className="btn-primary text-sm px-5 py-2">{bulkLoading?'⏳...':'🚀 Add All'}</button></div>}{bulkResults.length>0&&<div className="card max-h-48 overflow-y-auto"><p className="font-semibold mb-2">{bulkResults.filter(r=>r.status==='success').length}/{bulkResults.length} successful</p><div className="space-y-1">{bulkResults.map((r,i)=>(<div key={i} className="flex gap-2 text-sm"><span>{r.status==='success'?'✅':'❌'}</span><span className="text-gray-300">{r.q}</span></div>))}</div></div>}{msg&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}</div>)}
-    {addMode==='single'&&(<>{showQForm?(<form onSubmit={saveTestQuestion} className="card space-y-4 border-[#FF6B00]/30"><div className="flex items-center justify-between"><h3 className="font-semibold">{editId?'✏️ Edit':'➕ New'} Question</h3><button type="button" onClick={()=>{setShowQForm(false);setEditId(null)}} className="text-gray-400 text-sm">✕</button></div><div className="grid grid-cols-2 gap-4"><div><label className="label">Topic *</label><select className="input" value={qForm.topicId} onChange={e=>handleTopicChange(e.target.value)} required><option value="">-- Select --</option>{SUBJECTS.map(sub=>(<optgroup key={sub} label={`── ${sub} ──`}>{topics.filter(t=>t.subject===sub).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</optgroup>))}</select></div><div><label className="label">Difficulty</label><div className="flex gap-2 mt-1">{['Easy','Medium','Hard'].map(d=>(<button key={d} type="button" onClick={()=>setQForm(f=>({...f,difficulty:d}))} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 ${qForm.difficulty===d?d==='Easy'?'border-green-500 bg-green-500/20 text-green-400':d==='Medium'?'border-yellow-500 bg-yellow-500/20 text-yellow-400':'border-red-500 bg-red-500/20 text-red-400':'border-[#2a2a2a] text-gray-500'}`}>{d}</button>))}</div></div></div><div><label className="label">Question *</label><textarea className="input h-20 resize-none text-sm" value={qForm.questionText} onChange={e=>setQForm(f=>({...f,questionText:e.target.value}))} required/></div><div className="space-y-2">{[['A','optionA'],['B','optionB'],['C','optionC'],['D','optionD']].map(([label,key])=>{const isCorrect=qForm.correctAnswer!==''&&qForm.correctAnswer===qForm[key];return(<div key={key} className={`flex items-center gap-3 p-2.5 rounded-xl border-2 ${isCorrect?'border-green-500 bg-green-500/10':'border-[#2a2a2a] bg-[#111]'}`}><button type="button" onClick={()=>{if(qForm[key].trim())setQForm(f=>({...f,correctAnswer:f[key]}))}} className={`w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-xs shrink-0 ${isCorrect?'border-green-500 bg-green-500 text-white':'border-[#444] text-gray-400'}`}>{isCorrect?'✓':label}</button><input className="flex-1 bg-transparent outline-none text-sm" placeholder={`Option ${label}`} value={qForm[key]} onChange={e=>{const val=e.target.value;setQForm(f=>{const u={...f,[key]:val};if(f.correctAnswer===f[key])u.correctAnswer=val;return u})}} required/></div>)})}</div><div><label className="label">Explanation (optional)</label><textarea className="input h-16 resize-none text-sm" value={qForm.explanation} onChange={e=>setQForm(f=>({...f,explanation:e.target.value}))}/></div>{msg&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}<div className="flex gap-3"><button type="button" onClick={()=>{setShowQForm(false);setEditId(null)}} className="btn-outline flex-1">Cancel</button><button type="submit" disabled={saving} className="btn-primary flex-1">{saving?'Saving...':editId?'💾 Update':'➕ Add'}</button></div></form>):(<button onClick={()=>{setShowQForm(true);setEditId(null);setQForm({topicId:'',subject:'',topicName:'',questionText:'',optionA:'',optionB:'',optionC:'',optionD:'',correctAnswer:'',explanation:'',difficulty:'Medium'})}} className="btn-primary">➕ Add Question</button>)}{msg&&!showQForm&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}</>)}
-    <div className="card"><h3 className="font-semibold mb-3">Questions ({testQuestions.length})</h3><div className="space-y-3 max-h-[400px] overflow-y-auto">{testQuestions.length===0&&<p className="text-gray-500 text-sm text-center py-6">No questions yet.</p>}{testQuestions.map((q,i)=>(<div key={q.id} className="border border-[#2a2a2a] rounded-xl p-3"><div className="flex items-start justify-between gap-3"><div className="flex-1 min-w-0"><div className="flex items-center gap-2 mb-1"><span className="text-xs text-gray-500">Q{i+1}</span><span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs">{q.subject}</span><span className="badge bg-[#2a2a2a] text-gray-400 text-xs">{q.topicName}</span><span className={`badge text-xs ${diffColor[q.difficulty]}`}>{q.difficulty}</span></div><p className="text-sm font-medium">{q.questionText}</p></div><div className="flex flex-col gap-1.5 shrink-0"><button onClick={()=>editTestQ(q)} className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded-lg">✏️</button><button onClick={()=>deleteTestQ(q.id)} className="text-xs text-red-400 bg-red-500/10 px-2 py-1 rounded-lg">🗑️</button></div></div></div>))}</div></div>
+    {addMode==='single'&&(<>{showQForm?(<form onSubmit={saveTestQuestion} className="card space-y-4 border-[#FF6B00]/30"><div className="flex items-center justify-between"><h3 className="font-semibold">{editId?'✏️ Edit':'➕ New'} Question</h3><button type="button" onClick={()=>{setShowQForm(false);setEditId(null)}} className="text-gray-600 text-sm">✕</button></div><div className="grid grid-cols-2 gap-4"><div><label className="label">Topic *</label><select className="input" value={qForm.topicId} onChange={e=>handleTopicChange(e.target.value)} required><option value="">-- Select --</option>{SUBJECTS.map(sub=>(<optgroup key={sub} label={`── ${sub} ──`}>{topics.filter(t=>t.subject===sub).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</optgroup>))}</select></div><div><label className="label">Difficulty</label><div className="flex gap-2 mt-1">{['Easy','Medium','Hard'].map(d=>(<button key={d} type="button" onClick={()=>setQForm(f=>({...f,difficulty:d}))} className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 ${qForm.difficulty===d?d==='Easy'?'border-green-500 bg-green-500/20 text-green-400':d==='Medium'?'border-yellow-500 bg-yellow-500/20 text-yellow-400':'border-red-500 bg-red-500/20 text-red-400':'border-[#e5e7eb] text-gray-500'}`}>{d}</button>))}</div></div></div><div><label className="label">Question *</label><textarea className="input h-20 resize-none text-sm" value={qForm.questionText} onChange={e=>setQForm(f=>({...f,questionText:e.target.value}))} required/></div><div className="space-y-2">{[['A','optionA'],['B','optionB'],['C','optionC'],['D','optionD']].map(([label,key])=>{const isCorrect=qForm.correctAnswer!==''&&qForm.correctAnswer===qForm[key];return(<div key={key} className={`flex items-center gap-3 p-2.5 rounded-xl border-2 ${isCorrect?'border-green-500 bg-green-500/10':'border-[#e5e7eb] bg-white'}`}><button type="button" onClick={()=>{if(qForm[key].trim())setQForm(f=>({...f,correctAnswer:f[key]}))}} className={`w-7 h-7 rounded-full border-2 flex items-center justify-center font-bold text-xs shrink-0 ${isCorrect?'border-green-500 bg-green-500 text-white':'border-[#444] text-gray-600'}`}>{isCorrect?'✓':label}</button><input className="flex-1 bg-transparent outline-none text-sm" placeholder={`Option ${label}`} value={qForm[key]} onChange={e=>{const val=e.target.value;setQForm(f=>{const u={...f,[key]:val};if(f.correctAnswer===f[key])u.correctAnswer=val;return u})}} required/></div>)})}</div><div><label className="label">Explanation (optional)</label><textarea className="input h-16 resize-none text-sm" value={qForm.explanation} onChange={e=>setQForm(f=>({...f,explanation:e.target.value}))}/></div>{msg&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}<div className="flex gap-3"><button type="button" onClick={()=>{setShowQForm(false);setEditId(null)}} className="btn-outline flex-1">Cancel</button><button type="submit" disabled={saving} className="btn-primary flex-1">{saving?'Saving...':editId?'💾 Update':'➕ Add'}</button></div></form>):(<button onClick={()=>{setShowQForm(true);setEditId(null);setQForm({topicId:'',subject:'',topicName:'',questionText:'',optionA:'',optionB:'',optionC:'',optionD:'',correctAnswer:'',explanation:'',difficulty:'Medium'})}} className="btn-primary">➕ Add Question</button>)}{msg&&!showQForm&&<p className={`text-sm p-3 rounded-xl ${msg.startsWith('✅')?'bg-green-500/10 text-green-400':'bg-red-500/10 text-red-400'}`}>{msg}</p>}</>)}
+    <div className="card"><h3 className="font-semibold mb-3">Questions ({testQuestions.length})</h3><div className="space-y-3 max-h-[400px] overflow-y-auto">{testQuestions.length===0&&<p className="text-gray-500 text-sm text-center py-6">No questions yet.</p>}{testQuestions.map((q,i)=>(<div key={q.id} className="border border-[#e5e7eb] rounded-xl p-3"><div className="flex items-start justify-between gap-3"><div className="flex-1 min-w-0"><div className="flex items-center gap-2 mb-1"><span className="text-xs text-gray-500">Q{i+1}</span><span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs">{q.subject}</span><span className="badge bg-[#f1f5f9] text-gray-600 text-xs">{q.topicName}</span><span className={`badge text-xs ${diffColor[q.difficulty]}`}>{q.difficulty}</span></div><p className="text-sm font-medium">{q.questionText}</p></div><div className="flex flex-col gap-1.5 shrink-0"><button onClick={()=>editTestQ(q)} className="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded-lg">✏️</button><button onClick={()=>deleteTestQ(q.id)} className="text-xs text-red-400 bg-red-500/10 px-2 py-1 rounded-lg">🗑️</button></div></div></div>))}</div></div>
   </div>)
 }
 
@@ -866,5 +852,5 @@ function MockTestsTab() {
 function BulkTab() {
   const [csv,setCsv]=useState('');const [results,setResults]=useState([]);const [loading,setLoading]=useState(false);const auth=getAuth()
   async function bulkRegister(e){e.preventDefault();setLoading(true);setResults([]);const lines=csv.trim().split('\n').slice(1);const res=[];for(const line of lines){if(!line.trim())continue;const[username,email,password,year,stream]=line.split(',').map(s=>s.trim());try{const{user}=await createUserWithEmailAndPassword(auth,email,password);await setDoc(doc(db,'users',user.uid),{username,email,yearOfStudy:year,stream,streak:0,isSubscribed:false,isAdmin:false,createdAt:serverTimestamp()});res.push({email,status:'success'})}catch(err){res.push({email,status:'error',msg:err.message.replace('Firebase: ','').replace(/\(auth\/.*\)/,'').trim()})};};setResults(res);setLoading(false)}
-  return(<div className="max-w-2xl space-y-4"><div className="card bg-[#FF6B00]/5 border-[#FF6B00]/20 text-sm space-y-1"><p className="font-medium text-[#FF6B00]">CSV Format:</p><code className="text-gray-400 block">username,email,password,year,stream</code><code className="text-gray-400 block">Ravi Kumar,ravi@email.com,pass123,1,MPC</code></div><form onSubmit={bulkRegister} className="card space-y-4"><h3 className="font-semibold">Bulk Register Students</h3><textarea className="input h-48 resize-none font-mono text-sm" placeholder={"username,email,password,year,stream\nStudent1,s1@email.com,pass123,1,MPC"} value={csv} onChange={e=>setCsv(e.target.value)} required/><button type="submit" disabled={loading} className="btn-primary flex items-center gap-2"><Upload size={15}/>{loading?'Registering...':'Register All Students'}</button></form>{results.length>0&&(<div className="card space-y-2"><p className="font-semibold mb-2">{results.filter(r=>r.status==='success').length}/{results.length} successful</p>{results.map((r,i)=>(<div key={i} className="flex items-start gap-2 text-sm">{r.status==='success'?<CheckCircle size={14} className="text-green-400 mt-0.5 shrink-0"/>:<XCircle size={14} className="text-red-400 mt-0.5 shrink-0"/>}<div><span>{r.email}</span>{r.msg&&<p className="text-xs text-red-400 mt-0.5">{r.msg}</p>}</div></div>))}</div>)}</div>)
+  return(<div className="max-w-2xl space-y-4"><div className="card bg-[#FF6B00]/5 border-[#FF6B00]/20 text-sm space-y-1"><p className="font-medium text-[#FF6B00]">CSV Format:</p><code className="text-gray-600 block">username,email,password,year,stream</code><code className="text-gray-600 block">Ravi Kumar,ravi@email.com,pass123,1,MPC</code></div><form onSubmit={bulkRegister} className="card space-y-4"><h3 className="font-semibold">Bulk Register Students</h3><textarea className="input h-48 resize-none font-mono text-sm" placeholder={"username,email,password,year,stream\nStudent1,s1@email.com,pass123,1,MPC"} value={csv} onChange={e=>setCsv(e.target.value)} required/><button type="submit" disabled={loading} className="btn-primary flex items-center gap-2"><Upload size={15}/>{loading?'Registering...':'Register All Students'}</button></form>{results.length>0&&(<div className="card space-y-2"><p className="font-semibold mb-2">{results.filter(r=>r.status==='success').length}/{results.length} successful</p>{results.map((r,i)=>(<div key={i} className="flex items-start gap-2 text-sm">{r.status==='success'?<CheckCircle size={14} className="text-green-400 mt-0.5 shrink-0"/>:<XCircle size={14} className="text-red-400 mt-0.5 shrink-0"/>}<div><span>{r.email}</span>{r.msg&&<p className="text-xs text-red-400 mt-0.5">{r.msg}</p>}</div></div>))}</div>)}</div>)
 }

@@ -33,7 +33,7 @@ export default function Plans() {
     : null
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] px-4 py-10">
+    <div className="min-h-screen bg-[#f8fafc] px-4 py-10">
       <div className="max-w-md mx-auto">
 
         <div className="text-center mb-8">
@@ -41,7 +41,7 @@ export default function Plans() {
             <Crown size={28} className="text-white"/>
           </div>
           <h1 className="text-2xl font-bold">EamcetGenius Pro</h1>
-          <p className="text-gray-400 text-sm mt-2">
+          <p className="text-gray-600 text-sm mt-2">
             {isActive ? 'Your subscription is active' : 'Subscribe to access all features'}
           </p>
         </div>
@@ -51,9 +51,9 @@ export default function Plans() {
             <div className="card border-[#FF6B00]/30 bg-[#FF6B00]/5 text-center mb-5">
               <CheckCircle size={32} className="text-[#FF6B00] mx-auto mb-2"/>
               <p className="font-semibold text-lg">Subscription Active!</p>
-              <p className="text-sm text-gray-400 mt-1 capitalize">{profile.subscriptionPlan} Plan</p>
+              <p className="text-sm text-gray-600 mt-1 capitalize">{profile.subscriptionPlan} Plan</p>
               {endDate && (
-                <div className="mt-3 bg-[#0f0f0f] rounded-xl px-4 py-2">
+                <div className="mt-3 bg-[#f8fafc] rounded-xl px-4 py-2">
                   <p className="text-xs text-gray-500">Valid till</p>
                   <p className="font-bold text-[#FF6B00]">{endDate}</p>
                 </div>
@@ -68,7 +68,7 @@ export default function Plans() {
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-1"><Zap size={16} className="text-[#FF6B00]"/><span className="font-bold">Monthly Plan</span></div>
-                    <p className="text-gray-400 text-sm">30 days full access</p>
+                    <p className="text-gray-600 text-sm">30 days full access</p>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-[#FF6B00]">₹299</p>
@@ -84,7 +84,7 @@ export default function Plans() {
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-1"><Star size={16} className="text-[#FF6B00]"/><span className="font-bold">Yearly Plan</span></div>
-                    <p className="text-gray-400 text-sm">365 days full access</p>
+                    <p className="text-gray-600 text-sm">365 days full access</p>
                     <p className="text-xs text-gray-500 mt-1">Just ₹249/month</p>
                   </div>
                   <div className="text-right">
@@ -110,7 +110,7 @@ export default function Plans() {
             {/* Admin contact card */}
             <div className="card bg-[#FF6B00]/5 border-[#FF6B00]/20 mb-4">
               <p className="font-semibold text-sm mb-2">📞 Contact Admin to Subscribe</p>
-              <p className="text-xs text-gray-400 mb-3">
+              <p className="text-xs text-gray-600 mb-3">
                 Share your registered email with your teacher/admin and they'll activate your subscription instantly.
               </p>
               {adminContact ? (
@@ -135,7 +135,7 @@ export default function Plans() {
                   )}
                 </div>
               ) : (
-                <div className="bg-[#1a1a1a] rounded-xl px-3 py-2">
+                <div className="bg-white rounded-xl px-3 py-2">
                   <p className="text-xs text-gray-500">Your registered email:</p>
                   <p className="text-sm font-medium text-white mt-0.5">{profile?.email}</p>
                   <p className="text-xs text-gray-600 mt-1">Share this with your admin</p>
@@ -146,10 +146,11 @@ export default function Plans() {
         )}
 
         <button onClick={() => logout().then(() => navigate('/login'))}
-          className="w-full mt-2 text-center text-sm text-gray-600 hover:text-gray-400 transition-colors">
+          className="w-full mt-2 text-center text-sm text-gray-600 hover:text-gray-600 transition-colors">
           Logout
         </button>
       </div>
     </div>
   )
 }
+

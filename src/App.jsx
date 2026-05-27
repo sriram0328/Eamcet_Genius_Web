@@ -12,7 +12,7 @@ import AdminDash  from './pages/admin/AdminDash'
 
 function Spinner() {
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
       <div className="w-10 h-10 border-2 border-[#FF6B00] border-t-transparent rounded-full animate-spin"/>
     </div>
   )
@@ -51,3 +51,4 @@ export default function App() {
     </AuthProvider>
   )
 }
+

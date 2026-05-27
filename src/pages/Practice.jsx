@@ -231,7 +231,7 @@ export default function Practice() {
         <button onClick={() => {
           if (urlTopicId) navigate('/?refresh=1')
           else { setView('subjects'); setSubject(null); setSelTopic(null); setQCounts({}) }
-        }} className="flex items-center gap-2 text-gray-400 hover:text-white mb-5 text-sm">
+        }} className="flex items-center gap-2 text-gray-600 hover:text-white mb-5 text-sm">
           <ChevronLeft size={16}/> {urlTopicId ? 'Home' : 'Back'}
         </button>
 
@@ -284,7 +284,7 @@ export default function Practice() {
         {/* Difficulty selector */}
         {selTopic && (
           <div className="mb-5">
-            <p className="text-sm text-gray-400 mb-2">Select Difficulty</p>
+            <p className="text-sm text-gray-600 mb-2">Select Difficulty</p>
             <div className="flex gap-2">
               {DIFFICULTIES.map(d => {
                 const count  = qCounts[d] ?? '...'
@@ -292,7 +292,7 @@ export default function Practice() {
                 const color  = d==='Easy'?'border-green-500 bg-green-500/20 text-green-400':d==='Medium'?'border-yellow-500 bg-yellow-500/20 text-yellow-400':'border-red-500 bg-red-500/20 text-red-400'
                 return (
                   <button key={d} onClick={() => setDiff(d)}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${active?color:'border-[#2a2a2a] text-gray-500 hover:border-gray-500'}`}>
+                    className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${active?color:'border-[#e5e7eb] text-gray-500 hover:border-gray-500'}`}>
                     <p>{d}</p>
                     <p className="text-xs font-normal opacity-70 mt-0.5">{count} Qs</p>
                   </button>
@@ -335,7 +335,7 @@ export default function Practice() {
                 ? (passedThreshold ? 'Task Complete! ✅' : 'Not Quite There!')
                 : 'Session Complete!'}
             </h2>
-            <p className="text-gray-400 text-sm">{subject} · {selTopic?.name} · {diff}</p>
+            <p className="text-gray-600 text-sm">{subject} · {selTopic?.name} · {diff}</p>
             {/* Show threshold warning for daily tasks */}
             {isDailyTask && !passedThreshold && (
               <div className="mt-3 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-sm">
@@ -428,20 +428,20 @@ export default function Practice() {
             <p className="text-xs text-gray-500">Score: {score}</p>
           </div>
         </div>
-        <div className="w-full bg-[#2a2a2a] rounded-full h-1.5 mb-6">
+        <div className="w-full bg-[#f1f5f9] rounded-full h-1.5 mb-6">
           <div className="bg-[#FF6B00] h-1.5 rounded-full transition-all" style={{width:`${(qIndex/questions.length)*100}%`}}/>
         </div>
         {q && (
           <>
-            <div className="card mb-4 border-[#2a2a2a]"><p className="font-medium leading-relaxed">{q.questionText}</p></div>
+            <div className="card mb-4 border-[#e5e7eb]"><p className="font-medium leading-relaxed">{q.questionText}</p></div>
             <div className="space-y-3 mb-5">
               {opts.map((opt,i)=>{
                 const label=(['A','B','C','D'])[i], isCorrect=opt===q.correctAnswer, isChosen=opt===chosen
-                let cls='border-[#2a2a2a] hover:border-[#FF6B00]/40'
+                let cls='border-[#e5e7eb] hover:border-[#FF6B00]/40'
                 if(chosen!==null){if(isCorrect)cls='border-green-500 bg-green-500/10';else if(isChosen)cls='border-red-500 bg-red-500/10'}
                 return(
                   <button key={i} onClick={()=>handleAnswer(opt)} className={`w-full card flex items-center gap-3 text-left transition-all ${cls}`} disabled={chosen!==null}>
-                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${chosen!==null&&isCorrect?'bg-green-500 text-white':chosen!==null&&isChosen?'bg-red-500 text-white':'bg-[#2a2a2a]'}`}>{label}</span>
+                    <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${chosen!==null&&isCorrect?'bg-green-500 text-white':chosen!==null&&isChosen?'bg-red-500 text-white':'bg-[#f1f5f9]'}`}>{label}</span>
                     <span className="text-sm flex-1">{opt}</span>
                     {chosen!==null&&isCorrect&&<CheckCircle size={16} className="text-green-400 shrink-0"/>}
                     {chosen!==null&&isChosen&&!isCorrect&&<XCircle size={16} className="text-red-400 shrink-0"/>}
@@ -459,7 +459,7 @@ export default function Practice() {
             )}
             <div className="flex gap-3">
               <button onClick={()=>navigate('/?refresh=1')} className="btn-outline flex items-center gap-2 px-4"><Home size={15}/></button>
-              {chosen===null&&<button onClick={handleSkip} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:border-yellow-500/40 hover:text-yellow-400 text-sm transition-colors"><SkipForward size={15}/> Skip</button>}
+              {chosen===null&&<button onClick={handleSkip} className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#e5e7eb] text-gray-600 hover:border-yellow-500/40 hover:text-yellow-400 text-sm transition-colors"><SkipForward size={15}/> Skip</button>}
               {chosen!==null&&<button onClick={()=>next(false)} className="btn-primary flex-1">{qIndex+1>=questions.length?'See Results':'Next'} <ChevronRight size={15}/></button>}
             </div>
           </>
@@ -467,7 +467,7 @@ export default function Practice() {
         {!loading&&questions.length===0&&(
           <div className="text-center py-12">
             <p className="text-4xl mb-3">📭</p>
-            <p className="text-gray-400 font-medium">No questions found</p>
+            <p className="text-gray-600 font-medium">No questions found</p>
             <p className="text-gray-600 text-sm mt-1">Try a different difficulty</p>
             <button onClick={()=>setView('topics')} className="btn-outline mt-4">Go Back</button>
           </div>
@@ -476,3 +476,4 @@ export default function Practice() {
     </div>
   )
 }
+

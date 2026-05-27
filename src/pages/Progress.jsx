@@ -99,7 +99,7 @@ export default function Progress() {
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <div className="text-6xl mb-4">📊</div>
         <h2 className="text-xl font-bold mb-2">No data yet</h2>
-        <p className="text-gray-400 text-sm mb-6">Start practicing to see your progress here.</p>
+        <p className="text-gray-600 text-sm mb-6">Start practicing to see your progress here.</p>
         <button onClick={() => navigate('/practice')} className="btn-primary flex items-center gap-2 mx-auto">
           <BookOpen size={16}/> Start Practicing
         </button>
@@ -126,13 +126,13 @@ export default function Progress() {
               <div className="w-28 h-28 shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadialBarChart cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" data={chartData} startAngle={90} endAngle={-270}>
-                    <RadialBar dataKey="value" cornerRadius={10} background={{ fill:'#2a2a2a' }}/>
+                    <RadialBar dataKey="value" cornerRadius={10} background={{ fill:'#f1f5f9' }}/>
                   </RadialBarChart>
                 </ResponsiveContainer>
               </div>
               <div>
                 <p className="text-4xl font-bold text-[#FF6B00]">{stats.accuracy}%</p>
-                <p className="text-gray-400 text-sm">Overall Accuracy</p>
+                <p className="text-gray-600 text-sm">Overall Accuracy</p>
                 <div className="flex gap-4 mt-3">
                   <div><p className="text-green-400 font-semibold">{stats.correct}</p><p className="text-xs text-gray-500">Correct</p></div>
                   <div><p className="text-red-400 font-semibold">{stats.total-stats.correct}</p><p className="text-xs text-gray-500">Wrong</p></div>
@@ -170,7 +170,7 @@ export default function Progress() {
                           <span className={`text-sm font-bold ${s.accuracy>=70?'text-green-400':s.accuracy>=50?'text-yellow-400':'text-red-400'}`}>{s.accuracy}%</span>
                         </div>
                       </div>
-                      <div className="w-full bg-[#2a2a2a] rounded-full h-2">
+                      <div className="w-full bg-[#f1f5f9] rounded-full h-2">
                         <div className={`h-2 rounded-full transition-all duration-700 ${s.accuracy>=70?'bg-green-500':s.accuracy>=50?'bg-yellow-500':'bg-red-500'}`} style={{width:`${s.accuracy}%`}}/>
                       </div>
                     </div>
@@ -189,7 +189,7 @@ export default function Progress() {
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm truncate">{t.name}</p>
                         <p className="text-xs text-gray-500">{t.subject}</p>
-                        <div className="w-24 bg-[#2a2a2a] rounded-full h-1 mt-1.5"><div className="bg-red-500 h-1 rounded-full" style={{width:`${t.accuracy}%`}}/></div>
+                        <div className="w-24 bg-[#f1f5f9] rounded-full h-1 mt-1.5"><div className="bg-red-500 h-1 rounded-full" style={{width:`${t.accuracy}%`}}/></div>
                       </div>
                       <div className="flex items-center gap-3 shrink-0 ml-3">
                         <div className="text-right"><p className="text-red-400 font-bold text-sm">{t.accuracy}%</p><p className="text-xs text-gray-500">{t.correct}/{t.total}</p></div>
@@ -207,7 +207,7 @@ export default function Progress() {
             {weakTopics.length===0&&stats.total>0&&(
               <div className="card text-center border-green-500/20 bg-green-500/5">
                 <p className="text-green-400 font-semibold text-lg">🎉 No weak topics!</p>
-                <p className="text-gray-400 text-sm mt-1">You're scoring above 50% in everything. Keep it up!</p>
+                <p className="text-gray-600 text-sm mt-1">You're scoring above 50% in everything. Keep it up!</p>
               </div>
             )}
 
@@ -218,14 +218,14 @@ export default function Progress() {
                 <div className="grid grid-cols-10 gap-1.5">
                   {streakDays.map((d,i)=>(
                     <div key={i} title={d.date}
-                      className={`aspect-square rounded-md flex items-center justify-center text-[9px] font-medium ${d.completed?'bg-[#FF6B00] text-white':'bg-[#2a2a2a] text-gray-600'}`}>
+                      className={`aspect-square rounded-md flex items-center justify-center text-[9px] font-medium ${d.completed?'bg-[#FF6B00] text-white':'bg-[#f1f5f9] text-gray-600'}`}>
                       {d.day}
                     </div>
                   ))}
                 </div>
                 <div className="flex items-center gap-4 mt-3">
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#FF6B00]"/><span className="text-xs text-gray-500">Completed</span></div>
-                  <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#2a2a2a]"/><span className="text-xs text-gray-500">Missed</span></div>
+                  <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-[#f1f5f9]"/><span className="text-xs text-gray-500">Missed</span></div>
                 </div>
               </div>
             </section>
@@ -236,3 +236,4 @@ export default function Progress() {
     </div>
   )
 }
+

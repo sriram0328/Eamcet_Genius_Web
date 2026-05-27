@@ -13,7 +13,7 @@ export default function BottomNav() {
   const { pathname } = useLocation()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#0f0f0f] border-t border-[#2a2a2a] safe-area-pb">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[#f8fafc] border-t border-[#e5e7eb] safe-area-pb">
       <div className="max-w-2xl mx-auto flex">
         {nav.map(({ label, icon: Icon, path }) => {
           const active = pathname === path
@@ -29,3 +29,4 @@ export default function BottomNav() {
     </nav>
   )
 }
+

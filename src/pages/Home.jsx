@@ -84,7 +84,7 @@ export default function Home() {
             <AlertTriangle size={18} className="text-yellow-400 shrink-0"/>
             <div>
               <p className="text-yellow-400 font-semibold text-sm">Subscription expiring soon!</p>
-              <p className="text-gray-400 text-xs mt-0.5">Expires in <span className="text-yellow-400 font-bold">{daysLeft} day{daysLeft > 1 ? 's' : ''}</span>. Contact your admin to renew.</p>
+              <p className="text-gray-600 text-xs mt-0.5">Expires in <span className="text-yellow-400 font-bold">{daysLeft} day{daysLeft > 1 ? 's' : ''}</span>. Contact your admin to renew.</p>
             </div>
           </div>
         )}
@@ -92,9 +92,9 @@ export default function Home() {
         {/* Welcome banner */}
         <div className="relative overflow-hidden card border-[#FF6B00]/20 bg-gradient-to-br from-[#FF6B00]/10 to-transparent">
           <div className="absolute -top-6 -right-6 w-28 h-28 bg-[#FF6B00]/10 rounded-full"/>
-          <p className="text-gray-400 text-xs">{todayDate}</p>
+          <p className="text-gray-600 text-xs">{todayDate}</p>
           <h2 className="text-2xl font-bold mt-1">Hey, {profile?.username}! 👋</h2>
-          <p className="text-gray-400 text-sm mt-1">{profile?.stream} · Year {profile?.yearOfStudy}</p>
+          <p className="text-gray-600 text-sm mt-1">{profile?.stream} · Year {profile?.yearOfStudy}</p>
           <div className="flex items-center gap-4 mt-3">
             <div className="flex items-center gap-1.5">
               <Flame size={16} className="text-[#FF6B00]"/>
@@ -118,19 +118,19 @@ export default function Home() {
 
           {/* Progress bar */}
           {plan && tasks.length > 0 && (
-            <div className="w-full bg-[#2a2a2a] rounded-full h-1.5 mb-4">
+            <div className="w-full bg-[#f1f5f9] rounded-full h-1.5 mb-4">
               <div className="bg-[#FF6B00] h-1.5 rounded-full transition-all duration-500"
                 style={{ width: `${(completedCount/tasks.length)*100}%` }}/>
             </div>
           )}
 
           {loading ? (
-            <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#2a2a2a]"/>)}</div>
+            <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#f1f5f9]"/>)}</div>
           ) : !plan ? (
             // No plan assigned for today
-            <div className="card text-center py-8 border-dashed border-[#2a2a2a]">
+            <div className="card text-center py-8 border-dashed border-[#e5e7eb]">
               <Calendar size={28} className="text-gray-600 mx-auto mb-2"/>
-              <p className="text-gray-400 font-medium">No tasks assigned today</p>
+              <p className="text-gray-600 font-medium">No tasks assigned today</p>
               <p className="text-gray-600 text-xs mt-1">Your teacher will assign topics soon</p>
               <button onClick={() => navigate('/practice')} className="mt-4 text-[#FF6B00] text-sm font-medium hover:underline">
                 Practice freely →
@@ -191,3 +191,4 @@ export default function Home() {
     </div>
   )
 }
+

@@ -185,7 +185,7 @@ function nextQ() {
           <div className="text-center mb-6">
             <div className="text-5xl mb-3">{accuracy>=70?'🏆':accuracy>=50?'📚':'💪'}</div>
             <h2 className="text-2xl font-bold mb-1">{active.title}</h2>
-            <p className="text-gray-400 text-sm">Test completed!</p>
+            <p className="text-gray-600 text-sm">Test completed!</p>
           </div>
 
           {/* Score grid */}
@@ -207,7 +207,7 @@ function nextQ() {
           {rank && (
             <div className="card border-[#FF6B00]/20 bg-[#FF6B00]/5 mb-5 text-center">
               <Trophy size={24} className="text-[#FF6B00] mx-auto mb-2"/>
-              <p className="text-sm text-gray-400">Predicted EAMCET Rank</p>
+              <p className="text-sm text-gray-600">Predicted EAMCET Rank</p>
               <p className="text-3xl font-bold text-[#FF6B00]">~{rank.toLocaleString()}</p>
               <p className="text-xs text-gray-500 mt-1">Based on previous year patterns</p>
             </div>
@@ -265,7 +265,7 @@ function nextQ() {
     return (
       <div className="page">
         {/* Sticky test header */}
-        <div className="sticky top-0 bg-[#0f0f0f]/95 backdrop-blur border-b border-[#2a2a2a] px-4 py-3 z-50">
+        <div className="sticky top-0 bg-[#f8fafc]/95 backdrop-blur border-b border-[#e5e7eb] px-4 py-3 z-50">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
             <div className="min-w-0">
               <p className="font-semibold text-sm truncate max-w-[180px]">{active.title}</p>
@@ -278,7 +278,7 @@ function nextQ() {
           </div>
           {/* Progress bar */}
           <div className="max-w-2xl mx-auto mt-2">
-            <div className="w-full bg-[#2a2a2a] rounded-full h-1">
+            <div className="w-full bg-[#f1f5f9] rounded-full h-1">
               <div className="bg-[#FF6B00] h-1 rounded-full transition-all"
                 style={{ width:`${((qIndex)/questions.length)*100}%` }}/>
             </div>
@@ -290,7 +290,7 @@ function nextQ() {
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-bold text-[#FF6B00]">Q{qIndex+1}</span>
             <span className="badge bg-[#FF6B00]/10 text-[#FF6B00] text-xs">{q.subject}</span>
-            <span className="badge bg-[#2a2a2a] text-gray-400 text-xs">{q.topicName}</span>
+            <span className="badge bg-[#f1f5f9] text-gray-600 text-xs">{q.topicName}</span>
           </div>
 
           <div className="card mb-4">
@@ -312,7 +312,7 @@ function nextQ() {
         className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 transition-colors ${
           chosen === opt
             ? 'bg-[#FF6B00] text-white'
-            : 'bg-[#2a2a2a]'
+            : 'bg-[#f1f5f9]'
         }`}
       >
         {['A','B','C','D'][i]}
@@ -337,7 +337,7 @@ function nextQ() {
   <button
     onClick={prevQ}
     disabled={qIndex===0}
-    className="px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 disabled:opacity-40 disabled:cursor-not-allowed"
+    className="px-4 py-3 rounded-xl border border-[#e5e7eb] text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed"
   >
     Previous
   </button>
@@ -345,7 +345,7 @@ function nextQ() {
   {chosen === null && (
     <button
       onClick={handleSkip}
-      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:border-yellow-500/40 hover:text-yellow-400 text-sm transition-colors"
+      className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[#e5e7eb] text-gray-600 hover:border-yellow-500/40 hover:text-yellow-400 text-sm transition-colors"
     >
       <SkipForward size={15}/>
       Skip
@@ -378,7 +378,7 @@ function nextQ() {
         {/* Filter tabs */}
         <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1">
           <button onClick={()=>setFilter('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${filter==='all'?'bg-[#FF6B00] text-white':'bg-[#1a1a1a] text-gray-400 border border-[#2a2a2a]'}`}>
+            className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${filter==='all'?'bg-[#FF6B00] text-white':'bg-white text-gray-600 border border-[#e5e7eb]'}`}>
             All Tests
           </button>
           {TEST_TYPES.map(({key,label,icon:Icon,color,bg})=>(
@@ -390,13 +390,13 @@ function nextQ() {
         </div>
 
         {loading
-          ? <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#2a2a2a]"/>)}</div>
+          ? <div className="space-y-3">{[1,2,3].map(i=><div key={i} className="card h-16 animate-pulse bg-[#f1f5f9]"/>)}</div>
           : (
             <div className="space-y-3">
               {filtered.length===0 && (
                 <div className="text-center py-12">
                   <p className="text-4xl mb-3">📋</p>
-                  <p className="text-gray-400 font-medium">No tests available yet</p>
+                  <p className="text-gray-600 font-medium">No tests available yet</p>
                   <p className="text-gray-600 text-sm mt-1">Admin will add tests soon</p>
                 </div>
               )}
@@ -407,8 +407,8 @@ function nextQ() {
                   <button key={t.id} onClick={() => startTest(t)}
                     className="w-full card flex items-center justify-between hover:border-[#FF6B00]/50 transition-colors text-left">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${typeInfo?.bg||'bg-[#2a2a2a]'}`}>
-                        <Icon size={18} className={typeInfo?.color||'text-gray-400'}/>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${typeInfo?.bg||'bg-[#f1f5f9]'}`}>
+                        <Icon size={18} className={typeInfo?.color||'text-gray-600'}/>
                       </div>
                       <div>
                         <p className="font-semibold">{t.title}</p>
@@ -431,3 +431,4 @@ function nextQ() {
     </div>
   )
 }
+

@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         primary: { DEFAULT: '#FF6B00', dark: '#cc5500' },
-        dark:    { DEFAULT: '#0f0f0f', card: '#1a1a1a', border: '#2a2a2a' }
+        light:   { DEFAULT: '#f8fafc', card: '#ffffff', border: '#e5e7eb' }
       },
       fontFamily: { sans: ['Poppins', 'sans-serif'] }
     }
