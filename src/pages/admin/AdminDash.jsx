@@ -234,6 +234,7 @@ function SubsTab({ users, onRefresh }) {
   }
 
   const selUsers = users.filter(u => selIds.includes(u.id))
+  const sel      = selUsers[0] || null
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -288,8 +289,8 @@ function SubsTab({ users, onRefresh }) {
 
       {selIds.length > 0 && (
         <div className="card">
-          <h3 className="font-semibold mb-1">Edit: {sel.username}</h3>
-          <p className="text-xs text-gray-500 mb-4">{sel.email}</p>
+          <h3 className="font-semibold mb-1">Edit: {sel ? sel.username : `${selIds.length} selected`}</h3>
+          {sel ? <p className="text-xs text-gray-500 mb-4">{sel.email}</p> : null}
           <div className="space-y-4">
             <div>
               <label className="label">Plan</label>
