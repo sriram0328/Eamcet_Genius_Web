@@ -192,8 +192,12 @@ function SubsTab({ users, onRefresh }) {
       if (!isAlready && next.length === 1) {
         const today = new Date().toISOString().split('T')[0]
         const plan  = u.subscriptionPlan || 'monthly'
-        const start = u.subscriptionStart || today
-        const end   = u.subscriptionEnd   || calculateEndDate(start, plan)
+       // const start = u.subscriptionStart || today
+       // const end   = u.subscriptionEnd   || calculateEndDate(start, plan)
+       // setForm({ plan, start, end, isSubscribed: u.isSubscribed ?? false })
+        // AFTER
+        const start = today
+        const end   = calculateEndDate(start, plan)
         setForm({ plan, start, end, isSubscribed: u.isSubscribed ?? false })
       }
       setMsg('')
